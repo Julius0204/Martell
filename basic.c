@@ -35,10 +35,3 @@ void draw_map(){
 void move_figure(){
 
 }
-
-
-
-
-
-
-
