@@ -1,6 +1,6 @@
 #include <curses.h>
 #include <stdlib.h>
-#include "basic.c"
+#include "basic.h"
 
 int main(){
 start_game();
