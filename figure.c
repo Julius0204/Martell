@@ -2,8 +2,12 @@
 #include <stdlib.h>
 #include "map.h"
 #include "figure.h"
+#include <unistd.h>
 int move_right(int x);
 int move_left(int x);
+int jump(int y);
+int jump1(int y);
+int move_down(int y);
 WINDOW *sub1;
 
 void move_figure(){
@@ -22,20 +26,29 @@ wrefresh(sub1);
 input = getch();
 switch(input){
 	
-	case KEY_UP:
+	case ' ':
 		if(y_pos>10){
 		mvwaddch(sub1, y_pos, x_pos,' ');
 		y_pos = jump(y_pos);
 		mvwaddch(sub1, y_pos, x_pos,ACS_DIAMOND);
+		wrefresh(sub1);
+		usleep(100000);
+		mvwaddch(sub1, y_pos, x_pos,' ');
+                y_pos = jump1(y_pos);
+                mvwaddch(sub1, y_pos, x_pos,ACS_DIAMOND);
+                wrefresh(sub1);
+                usleep(400000);
+		mvwaddch(sub1, y_pos,x_pos,' ');
+                y_pos = move_down(y_pos);
+                mvwaddch(sub1, y_pos,x_pos,ACS_DIAMOND);
+		wrefresh(sub1);
+		usleep(100000);
+		mvwaddch(sub1, y_pos,x_pos,' ');
+                y_pos = move_down(y_pos);
+                mvwaddch(sub1, y_pos,x_pos,ACS_DIAMOND);
+		wrefresh(sub1);
 		}
 	break;
-	case KEY_DOWN:
-		if(y_pos<19){
-		mvwaddch(sub1, y_pos,x_pos,' ');
-		y_pos = move_down(y_pos);
-		mvwaddch(sub1, y_pos,x_pos,ACS_DIAMOND);
-		}
-	break;	
 	case KEY_LEFT:
 		if(x_pos>0){
 		mvwaddch(sub1, y_pos, x_pos,' ');
@@ -59,10 +72,16 @@ exit(0);
 int jump(int y){
 return y-=2;
 }
+int jump1(int y){
+return y-=2;
+}
+
 
 int move_down(int y){
-return ++y;
+return y+=2;
 }
+
+
 
 int move_left(int x){
 return --x;
