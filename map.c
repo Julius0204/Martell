@@ -41,6 +41,6 @@ wrefresh(sub1);
 
 void draw_ground(){
     for(int i=0;i<=108;++i){
-        mvwaddch(sub1, 20, i, ACS_HLINE);
+        mvwaddch(sub1, 20, i, '^');
     }
 }
