@@ -1,8 +1,10 @@
 #ifndef MAPGEN_H
 #define MAPGEN_H
 
+#define defMapLength 100
+
 const short mapLength;
-short heightmap[];
+short heightmap[defMapLength];
 
 void genHeightmap();
 

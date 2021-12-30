@@ -1,10 +1,7 @@
 #include "mapgen.h"
 #include <stdlib.h>
 
-#define defMapLength 100
-
 const short mapLength = defMapLength;
-short heightmap[defMapLength];
 
 void genHeightmap() {
 	// length of the flat area at the beginning (left side) of the map:
