@@ -15,7 +15,8 @@ int x_pos, y_pos, input;
 x_pos=0;
 y_pos=19;
 input=0;
-
+nodelay(stdscr, TRUE);
+curs_set(0);
 //First, add a figure into the subwindow one
 mvwaddch(sub1,y_pos, x_pos, ACS_DIAMOND);
 
@@ -24,10 +25,13 @@ move(y_pos, x_pos);
 refresh();
 wrefresh(sub1);
 input = getch();
+if (input != ERR) {
+  while (getch() == input);
+}
 switch(input){
 	
 	case ' ':
-		if(y_pos>10){
+		if(y_pos>=19){
 		mvwaddch(sub1, y_pos, x_pos,' ');
 		y_pos = jump(y_pos);
 		mvwaddch(sub1, y_pos, x_pos,ACS_DIAMOND);
@@ -47,6 +51,7 @@ switch(input){
                 y_pos = move_down(y_pos);
                 mvwaddch(sub1, y_pos,x_pos,ACS_DIAMOND);
 		wrefresh(sub1);
+		usleep(100000);
 		}
 	break;
 	case KEY_LEFT:
