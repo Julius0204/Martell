@@ -16,7 +16,8 @@ int x_pos, y_pos, input;
 x_pos=0;
 y_pos=19;
 input=0;
-
+nodelay(stdscr, TRUE);
+curs_set(0);
 //First, add a figure into the subwindow one
 char figure[] = "*\n|\n/\\";
 mvwaddch(sub1,y_pos, x_pos, ACS_DIAMOND);
@@ -28,13 +29,24 @@ refresh();
 wrefresh(sub1);
 input = getch();
 <<<<<<< HEAD
+<<<<<<< HEAD
 switch(input){	
 =======
+=======
+if (input != ERR) {
+  while (getch() == input);
+}
+>>>>>>> 5d302123a6869e284269de2f083900a4caec6e8b
 switch(input){
 	
 >>>>>>> 9fffea41a0ce9e3ae7b48192f0ba19edb9c48758
 	case ' ':
+<<<<<<< HEAD
 		if(y_pos>10){
+=======
+		if(y_pos>=19){
+		mvwaddch(sub1, y_pos, x_pos,' ');
+>>>>>>> 5d302123a6869e284269de2f083900a4caec6e8b
 		y_pos = jump(y_pos);
 		mvwaddch(sub1, y_pos, x_pos,ACS_DIAMOND);
 <<<<<<< HEAD
@@ -66,6 +78,7 @@ switch(input){
                 y_pos = move_down(y_pos);
                 mvwaddch(sub1, y_pos,x_pos,ACS_DIAMOND);
 		wrefresh(sub1);
+		usleep(100000);
 		}
 	break;
 	case KEY_LEFT:
