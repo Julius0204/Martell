@@ -5,6 +5,7 @@
 
 const short mapLength;
 short heightmap[defMapLength];
+const short maxHeightDiff;
 
 void genHeightmap();
 
