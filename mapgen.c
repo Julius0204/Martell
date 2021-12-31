@@ -1,5 +1,6 @@
 #include "mapgen.h"
 #include <stdlib.h>
+#include <ncurses.h>
 
 const short mapLength = defMapLength;
 // maximal height discrepancy from y=0:
@@ -21,4 +22,10 @@ void genHeightmap() {
 		}
 		heightmap[x] = y;
 	}
+}
+
+void genPad() {
+	initscr();
+	WINDOW *map = newpad(int nlines, int ncols);
+	endwin();
 }
