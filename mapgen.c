@@ -25,9 +25,6 @@ void genHeightmap() {
 }
 
 void genPad() {
-	initscr();
-	int maxX, maxY;
-	getmaxyx(stdscr, maxY, maxX);
-	WINDOW *map = newpad(maxY, maxX);
-	endwin();
+	const short padHeight = 2*maxHeightDiff + 1;
+	WINDOW *map = newpad(padHeight, mapLength);
 }
