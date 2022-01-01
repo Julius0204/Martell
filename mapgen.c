@@ -26,6 +26,8 @@ void genHeightmap() {
 
 void genPad() {
 	initscr();
-	WINDOW *map = newpad(int nlines, int ncols);
+	int maxX, maxY;
+	getmaxyx(stdscr, maxY, maxX);
+	WINDOW *map = newpad(maxY, maxX);
 	endwin();
 }
