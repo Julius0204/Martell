@@ -8,5 +8,6 @@ short heightmap[defMapLength];
 const short maxHeightDiff;
 
 void genHeightmap();
+void genPad();
 
 #endif // MAPGEN_H
