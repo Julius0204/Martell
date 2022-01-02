@@ -1,3 +1,5 @@
+#include <ncurses.h>
+
 #ifndef MAPGEN_H
 #define MAPGEN_H
 
@@ -8,6 +10,6 @@ short heightmap[defMapLength];
 const short maxHeightDiff;
 
 void genHeightmap();
-void genPad();
+extern WINDOW *genPad();
 
 #endif // MAPGEN_H
