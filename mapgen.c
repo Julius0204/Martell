@@ -24,7 +24,7 @@ void genHeightmap() {
 	}
 }
 
-extern WINDOW *genPad() {
+WINDOW *genPad() {
 	const short padHeight = 2*maxHeightDiff + 1;
 	WINDOW *map = newpad(padHeight, mapLength);
 	for (short x=0; x < mapLength; x++) {
