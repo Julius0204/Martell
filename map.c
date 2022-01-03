@@ -3,9 +3,8 @@
 #include <ncurses/panel.h>
 #include "map.h"
 #include "figure.h"
-
+//WINDOW *sub1 = newwin(20,80,5,10);
 void init_screen(){
-
 /*initialize screen*/
 initscr();
 keypad(stdscr,TRUE);
@@ -20,7 +19,7 @@ bkgd(COLOR_PAIR(BASIC_WINDOW));
 /*color initialized for BASIC_WINDOW*/
 
 /*initialize sub1*/
-WINDOW *sub1 = newwin(20,80,5,10);
+WINDOW *sub1 = newwin(LIN,COL,5,10);
 init_pair(SUB_WINDOW1,COLOR_BLUE,COLOR_GREEN);
 wbkgd(sub1, COLOR_PAIR(SUB_WINDOW1));
 /*initialized sub1*/
@@ -29,24 +28,23 @@ wbkgd(sub1, COLOR_PAIR(SUB_WINDOW1));
 PANEL *pan1 = new_panel(sub1);
 /*panel succesfully created & attached*/
 
-
-
-
 /*call draw_ground to draw a ground*/
-draw_ground();
+draw_ground(sub1);
 /*ground is drawn*/
 
 /*call move_figure to place it, and to move it*/
-move_figure();
+//move_figure();
 /*figure place*/
 
-/*refresh*/
+/*refreshing the panel*/
 update_panels();
 doupdate();
-refresh();
-wrefresh(sub1);
+getch();
+//terminating the programm
+endwin();
+exit(0);
 }
 
-void draw_ground(){
-mvwhline(sub1, 20, 0, ACS_HLINE, 108);
+void draw_ground(WINDOW *win){
+mvwhline(win, LIN-1, 0, ACS_HLINE, COL-1);
 }
