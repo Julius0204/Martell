@@ -24,11 +24,11 @@ void genHeightmap() {
 	}
 }
 
-WINDOW *genPad() {
+WINDOW genPad() {
 	const short padHeight = 2*maxHeightDiff + 1;
 	WINDOW *map = newpad(padHeight, mapLength);
 	for (short x=0; x < mapLength; x++) {
 		mvwvline(map, maxHeightDiff - heightmap[x], x, '@', maxHeightDiff+1 + heightmap[x]);
 	}
-	return map;
+	return *map;
 }

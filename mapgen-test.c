@@ -18,7 +18,8 @@ void printHeightmap() {
 void padHeightmap() {
 	genHeightmap();
 	initscr();
-	WINDOW *map = genPad();
+	WINDOW mapVar = genPad();
+	WINDOW *map = &mapVar;
 	refresh();
 	prefresh(map, 0, 0, 0, 0, 30, 60);
 	getch();
