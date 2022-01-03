@@ -3,22 +3,21 @@
 #include <ncurses/panel.h>
 #include <time.h>
 #include "pan_imp.h"
-
 void gen_pan(){
-//Determine terminal type, initialize all curses data structures
+// Determine terminal type, initialize all curses data structures
 initscr();
-//enable colors
+// enable colors
 start_color();
-//Enable the keypad of the user's terminal
+// Enable the keypad of the user's terminal
 keypad(stdscr,true);
-//disable line buffering, making characters immediately available to the program
+// disable line buffering, making characters immediately available to the program
 cbreak();
-//disable echoing of characters typed by the user
+// disable echoing of characters typed by the user
 noecho();
-//create window and variables for coordinates
+// create window and variables for coordinates
 short x_bgn=10,y_bgn=5;
 WINDOW *win_1 = newwin(LIN,COL,y_bgn, x_bgn);
-//create panel, attach it to the window
+// create panel, attach it to the window
 PANEL *pan_1 = new_panel(win_1);
 //draw an horizontal line, this time with the curses function mvwhline. 
 //it requires a pointer to a window, a start point and a length. The length is col-1.
