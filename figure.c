@@ -38,7 +38,7 @@ switch(input){
 		wrefresh(sub1);
 		usleep(100000);
 		mvwaddch(sub1, y_pos, x_pos,' ');
-                y_pos = jump1(y_pos);
+                y_pos = jump(y_pos);
                 mvwaddch(sub1, y_pos, x_pos,ACS_DIAMOND);
                 wrefresh(sub1);
                 usleep(400000);
@@ -77,16 +77,10 @@ exit(0);
 int jump(int y){
 return y-=2;
 }
-int jump1(int y){
-return y-=2;
-}
-
 
 int move_down(int y){
 return y+=2;
 }
-
-
 
 int move_left(int x){
 return --x;
