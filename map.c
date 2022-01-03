@@ -36,11 +36,8 @@ move_figure();
 /*refresh*/
 refresh();
 wrefresh(sub1);
-
 }
 
 void draw_ground(){
-    for(int i=0;i<=108;++i){
-        mvwaddch(sub1, 20, i, ACS_HLINE);
-    }
+mvwhline(sub1, 20, 0, ACS_HLINE, 108);
 }
