@@ -33,7 +33,7 @@ draw_ground(sub1);
 /*ground is drawn*/
 
 /*call move_figure to place it, and to move it*/
-//move_figure();
+move_figure(sub1);
 /*figure place*/
 
 /*refreshing the panel*/
