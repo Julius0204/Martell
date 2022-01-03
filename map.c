@@ -20,7 +20,7 @@ bkgd(COLOR_PAIR(BASIC_WINDOW));
 /*color initialized for BASIC_WINDOW*/
 
 /*initialize sub1*/
-WINDOW *sub1 = newwin(25,100,5,10);
+WINDOW *sub1 = newwin(20,80,5,10);
 init_pair(SUB_WINDOW1,COLOR_BLUE,COLOR_GREEN);
 wbkgd(sub1, COLOR_PAIR(SUB_WINDOW1));
 /*initialized sub1*/
@@ -41,6 +41,8 @@ move_figure();
 /*figure place*/
 
 /*refresh*/
+update_panels();
+doupdate();
 refresh();
 wrefresh(sub1);
 }
