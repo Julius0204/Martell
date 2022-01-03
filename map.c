@@ -1,8 +1,8 @@
 #include <curses.h>
 #include <stdlib.h>
+#include <ncurses/panel.h>
 #include "map.h"
 #include "figure.h"
-WINDOW *sub1;
 
 void init_screen(){
 
@@ -20,10 +20,17 @@ bkgd(COLOR_PAIR(BASIC_WINDOW));
 /*color initialized for BASIC_WINDOW*/
 
 /*initialize sub1*/
-sub1 = newwin(25,100,5,10);
+WINDOW *sub1 = newwin(25,100,5,10);
 init_pair(SUB_WINDOW1,COLOR_BLUE,COLOR_GREEN);
 wbkgd(sub1, COLOR_PAIR(SUB_WINDOW1));
 /*initialized sub1*/
+
+/*initialize panel, attach it to the window*/
+PANEL *pan1 = new_panel(sub1);
+/*panel succesfully created & attached*/
+
+
+
 
 /*call draw_ground to draw a ground*/
 draw_ground();
