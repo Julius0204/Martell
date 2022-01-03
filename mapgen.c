@@ -1,6 +1,7 @@
 #include "mapgen.h"
 #include <stdlib.h>
-#include <ncurses.h>
+
+// Heightmap:
 
 const short mapLength = defMapLength;
 // maximal height discrepancy from y=0:
@@ -24,9 +25,14 @@ void genHeightmap() {
 	}
 }
 
+// Pad:
+
+short padHeight;
+WINDOW *map;
+
 void genPad() {
-	const short padHeight = 2*maxHeightDiff + 1;
-	WINDOW *map = newpad(padHeight, mapLength);
+	padHeight = 2*maxHeightDiff + 1;
+	map = newpad(padHeight, mapLength);
 	for (short x=0; x < mapLength; x++) {
 		mvwvline(map, maxHeightDiff - heightmap[x], x, '@', maxHeightDiff+1 + heightmap[x]);
 	}
