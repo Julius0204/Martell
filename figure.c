@@ -5,7 +5,7 @@
 #include <unistd.h>
 WINDOW *sub1;
 
-void move_figure(WINDOW *win){
+void move_figure(WINDOW *win, int arr[]){
 int x_pos, y_pos, input;
 x_pos=0;
 y_pos=18;
@@ -57,14 +57,14 @@ switch(input){
 	case KEY_LEFT:
 		if(x_pos>0){
 		mvwaddch(win, y_pos, x_pos,space);
-		x_pos = move_left(x_pos);
+		x_pos = move_left(x_pos, arr);
 		mvwaddch(win, y_pos,x_pos,ACS_DIAMOND);
 		}
 	break;
 	case KEY_RIGHT:
 		if(x_pos < COLS-1){
 		mvwaddch(win, y_pos, x_pos,space);
-		x_pos = move_right(x_pos);
+		x_pos = move_right(x_pos,arr, COL-2);
 		mvwaddch(win, y_pos,x_pos,ACS_DIAMOND);
 		}
 	break;
@@ -80,10 +80,16 @@ int move_down(int y){
 return y+=2;
 }
 
-int move_left(int x){
+int move_left(int x, int x_pos[]){
 return --x;
 }
 
-int move_right(int x){
+int move_right(int x, int x_pos[], int size){
+int chk = x;
+for(int i=0;i<COL-2;++i){
+if(x_pos[i] == ++chk){
+return x;
+}
+}
 return ++x;
 }

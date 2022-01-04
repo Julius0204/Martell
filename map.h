@@ -7,4 +7,5 @@
 WINDOW *sub1;
 void init_screen();
 void draw_ground();
+void place_obstacles();
 #endif

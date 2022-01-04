@@ -1,9 +1,9 @@
 #include <curses.h>
 #include <stdlib.h>
 #include <ncurses/panel.h>
+#include <time.h>
 #include "map.h"
 #include "figure.h"
-//WINDOW *sub1 = newwin(20,80,5,10);
 void init_screen(){
 /*initialize screen*/
 initscr();
@@ -32,8 +32,12 @@ PANEL *pan1 = new_panel(sub1);
 draw_ground(sub1);
 /*ground is drawn*/
 
+//draw obstacles
+int x_values[COL-2];
+place_obstacles(sub1, x_values);
+
 /*call move_figure to place it, and to move it*/
-move_figure(sub1);
+move_figure(sub1, x_values);
 /*figure place*/
 
 /*refreshing the panel*/
@@ -43,6 +47,26 @@ getch();
 //terminating the programm
 endwin();
 exit(0);
+}
+
+
+
+
+//This function places obstacles, so that the figure has to jump and climb over them
+void place_obstacles(WINDOW *win, int arr[]){
+//the principle here is that the obstacles are placed pseudo-randomly
+srand(time(NULL));
+
+//An array in which the position of the obstacles are saved
+short ran_hei=0, x_pos=10;
+for(int i=0;i<COL-2;++i){
+ran_hei = (rand()%5)+1;
+for(int j=0;j<ran_hei&&x_pos<COL-2;++j){
+mvwaddch(win, (LIN-2)-j, x_pos,ACS_CKBOARD);
+}
+arr[i] = x_pos;
+x_pos+=5;
+}
 }
 
 void draw_ground(WINDOW *win){
