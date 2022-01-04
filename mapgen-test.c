@@ -19,8 +19,10 @@ void padHeightmap() {
 	genHeightmap();
 	initscr();
 	refresh();
+	short xMax, yMax;
+	getmaxyx(stdscr, yMax, xMax);
 	genPad();
-	prefresh(map, 0, 0, 0, 0, padHeight-1, mapLength-1);
+	prefresh(map, 0, 0, 0, 0, yMax-1, xMax-1);
 	getch();
 	endwin();
 }
