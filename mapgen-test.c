@@ -15,10 +15,20 @@ void printHeightmap() {
 	}
 }
 
+void padHeightmap() {
+	genHeightmap();
+	initscr();
+	refresh();
+	genPad();
+	prefresh(map, 0, 0, 0, 0, padHeight-1, mapLength-1);
+	getch();
+	endwin();
+}
+
 int main(int argc, char *argv[]) {
 	if (argc == 2) {
 		if (strcmp(argv[1], "print") == 0) {printHeightmap(); return 0;}
-		else if (strcmp(argv[1], "pad") == 0) {printf("coming soon\n"); return 0;}
+		else if (strcmp(argv[1], "pad") == 0) {padHeightmap(); return 0;}
 	}
 	printf("You must specify exactly one argument which can be either 'print' or 'pad'.\n");
 	return 0;
