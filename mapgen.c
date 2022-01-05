@@ -37,3 +37,10 @@ void genPad() {
 		mvwvline(map, maxHeightDiff - heightmap[x], x, '@', maxHeightDiff+1 + heightmap[x]);
 	}
 }
+
+// show and refresh pad at position x:
+void refPad(short x) {
+	short xMax, yMax;
+	getmaxyx(stdscr, yMax, xMax);
+	prefresh(map, 0, x, yMax - padHeight, 0, yMax-1, xMax-1);
+}

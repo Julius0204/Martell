@@ -19,5 +19,6 @@ short padHeight;
 WINDOW *map;
 
 void genPad();
+void refPad(short x);
 
 #endif // MAPGEN_H
