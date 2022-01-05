@@ -22,7 +22,7 @@ void padHeightmap() {
 	short xMax, yMax;
 	getmaxyx(stdscr, yMax, xMax);
 	genPad();
-	prefresh(map, 0, 0, 0, 0, yMax-1, xMax-1);
+	prefresh(map, 0, 0, yMax - padHeight, 0, yMax-1, xMax-1);
 	getch();
 	endwin();
 }
