@@ -3,7 +3,7 @@
 #ifndef MAPGEN_H
 #define MAPGEN_H
 
-#define defMapLength 100
+#define defMapLength 500
 
 // Heightmap:
 
