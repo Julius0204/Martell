@@ -18,6 +18,9 @@ void printHeightmap() {
 void padHeightmap() {
 	genHeightmap();
 	initscr();
+	cbreak();
+	noecho();
+	keypad(stdscr, TRUE);
 	refresh();
 	genPad();
 	refPad(0);
