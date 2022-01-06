@@ -42,5 +42,5 @@ void genPad() {
 void refPad(short x) {
 	short xMax, yMax;
 	getmaxyx(stdscr, yMax, xMax);
-	prefresh(map, 0, x, yMax - padHeight, 0, yMax-1, xMax-1);
+	prefresh(map, 0, x - xMax/2, yMax - padHeight, xMax/2 - x, yMax-1, xMax-1);
 }
