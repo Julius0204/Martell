@@ -23,8 +23,14 @@ void padHeightmap() {
 	keypad(stdscr, TRUE);
 	refresh();
 	genPad();
-	refPad(0);
-	getch();
+	int x = 0;
+	do {
+		refPad(x);
+		int ch = getch();
+		if (ch == KEY_RIGHT) x++;
+		else if (ch == KEY_LEFT) x--;
+		else if (ch != KEY_RESIZE) break;
+	} while (true);
 	endwin();
 }
 
