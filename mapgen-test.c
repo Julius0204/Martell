@@ -1,4 +1,5 @@
 #include "mapgen.h"
+#include "customCurses.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -17,10 +18,7 @@ void printHeightmap() {
 
 void padHeightmap() {
 	genHeightmap();
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr, TRUE);
+	initialize();
 	refresh();
 	genPad();
 	int x = 0;
