@@ -25,8 +25,8 @@ void padHeightmap() {
 	do {
 		refPad(x);
 		int ch = getch();
-		if (ch == KEY_RIGHT) x++;
-		else if (ch == KEY_LEFT) x--;
+		if (right(ch)) x++;
+		else if (left(ch)) x--;
 		else if (ch != KEY_RESIZE) break;
 	} while (true);
 	endwin();

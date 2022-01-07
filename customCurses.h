@@ -5,4 +5,9 @@
 
 void initialize();
 
+char left();
+char right();
+char up();
+char down();
+
 #endif // CUSTOMCURSES_H
