@@ -38,5 +38,5 @@ void movement() {
 	long long timeDiff_usec = getTimeDiff_usec();
 	if (timeDiff_usec == 0) return;
 	calcPos(timeDiff_usec);
-	mvprintw((int) posY, (int) posX, "@");
+	mvaddch((int) posY, (int) posX, '@');
 }
