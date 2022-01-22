@@ -1,6 +1,6 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
-void move();
+void movement();
 
 #endif // MOVEMENT_H

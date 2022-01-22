@@ -1,9 +1,20 @@
 #include "movement.h"
 #include <stdio.h>
+#include <ncurses.h>
+
+void initialize() {
+	initscr();
+	cbreak();
+	noecho();
+	keypad(stdscr, TRUE);
+}
 
 int main() {
+	initialize();
 	while (1) {
-		move();
+		movement();
+		refresh();
 	}
+	endwin();
 	return 0;
 }

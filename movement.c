@@ -1,5 +1,6 @@
 #include "movement.h"
 #include <sys/time.h>
+#include <ncurses.h>
 
 // Only for debugging purposes, remove later!
 #include <stdio.h> // debug
@@ -31,11 +32,11 @@ void calcPos(long long timeDiff_usec) {
 	velocityY = 0.000001; // debug
 	posX = posX + velocityX * timeDiff_usec,
 	posY = posY + velocityY * timeDiff_usec;
-	printf("posX: %f, posY: %f\n", posX, posY); // debug
 }
 
-void move() {
+void movement() {
 	long long timeDiff_usec = getTimeDiff_usec();
 	if (timeDiff_usec == 0) return;
 	calcPos(timeDiff_usec);
+	mvprintw((int) posY, (int) posX, "@");
 }
