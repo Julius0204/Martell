@@ -26,7 +26,16 @@ long long getTimeDiff_usec() {
 	return timeDiff_usec;
 }
 
+void calcPos(long long timeDiff_usec) {
+	velocityX = 0.000001; // debug
+	velocityY = 0.000001; // debug
+	posX = posX + velocityX * timeDiff_usec,
+	posY = posY + velocityY * timeDiff_usec;
+	printf("posX: %f, posY: %f\n", posX, posY); // debug
+}
+
 void move() {
 	long long timeDiff_usec = getTimeDiff_usec();
 	if (timeDiff_usec == 0) return;
+	calcPos(timeDiff_usec);
 }
