@@ -12,22 +12,22 @@ long long getTimeDiff_usec() {
 	struct timeval newTime;
 	gettimeofday(&newTime, 0);
 	long long currentTime_usec = (long long) newTime.tv_sec * 1000000 + newTime.tv_usec;
-	printf("\n  lastTime_usec    = %lld\n  currentTime_usec = %lld\n", lastTime_usec, currentTime_usec); // debug
+	//printf("\n  lastTime_usec    = %lld\n  currentTime_usec = %lld\n", lastTime_usec, currentTime_usec); // debug
 	if (lastTime_usec == 0) {
 		lastTime_usec = currentTime_usec;
-		printf("\n  lastTime_usec    = %lld\n  currentTime_usec = %lld\n", lastTime_usec, currentTime_usec); // debug
+		//printf("\n  lastTime_usec    = %lld\n  currentTime_usec = %lld\n", lastTime_usec, currentTime_usec); // debug
 		return 0;
 	}
 	long long timeDiff_usec = currentTime_usec - lastTime_usec;
-	printf("\n  timeDiff_usec = %lld\n", timeDiff_usec); // debug
+	//printf("\n  timeDiff_usec = %lld\n", timeDiff_usec); // debug
 	if (timeDiff_usec == 0) return 0;
 	lastTime_usec = currentTime_usec;
-	printf("\n  lastTime_usec    = %lld\n  currentTime_usec = %lld\n", lastTime_usec, currentTime_usec); // debug
+	//printf("\n  lastTime_usec    = %lld\n  currentTime_usec = %lld\n", lastTime_usec, currentTime_usec); // debug
 	return timeDiff_usec;
 }
 
 void calcPos(long long timeDiff_usec) {
-	velocityX = 0.000001; // debug
+	velocityX = 0.000002; // debug
 	velocityY = 0.000001; // debug
 	posX = posX + velocityX * timeDiff_usec,
 	posY = posY + velocityY * timeDiff_usec;
