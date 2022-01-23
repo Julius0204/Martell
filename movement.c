@@ -20,36 +20,27 @@ long long getTimeDiff_usec() {
 	return timeDiff_usec;
 }
 
-void calcPos(long long timeDiff_usec) {
-	velocityX = 0.000002; // debug
-	velocityY = 0.000001; // debug
-	float newPosX = posX + velocityX * timeDiff_usec,
-		  newPosY = posY + velocityY * timeDiff_usec;
-	int intPosX = (int) (posX + 0.5),
-		intPosY = (int) (posY + 0.5),
-		intNewPosX = (int) (newPosX + 0.5),
-		intNewPosY = (int) (newPosY + 0.5);
-	int diffIntPosX = intNewPosX - intPosX;
-	int diffIntPosY = intNewPosY - intPosY;
-	if (diffIntPosX > 1) {
-		newPosX = intPosX + 1.49;
-		intNewPosX = intPosX + 1;
-	} else if (diffIntPosX < -1) {
-		newPosX = intPosX - 1.5;
-		intNewPosX = intPosX - 1;
+int intPos(float pos) {
+	return (int) (pos + 0.5);
+}
+
+float calcPos(long long timeDiff_usec, float pos, float velocity) {
+	float newPos = pos + velocity * timeDiff_usec;
+	int diffIntPos = intPos(newPos) - intPos(pos);
+	if (diffIntPos > 1) {
+		newPos = intPos(pos) + 1.49;
+	} else if (diffIntPos < -1) {
+		newPos = intPos(pos) - 1.5;
 	}
-	if (diffIntPosY > 1) {
-		newPosY = intPosY + 1.49;
-		intNewPosY = intPosY + 1;
-	} else if (diffIntPosY < -1) {
-		newPosY = intPosY - 1.5;
-		intNewPosY = intPosY - 1;
-	}
+	return newPos;
 }
 
 void movement() {
 	long long timeDiff_usec = getTimeDiff_usec();
 	if (timeDiff_usec == 0) return;
-	calcPos(timeDiff_usec);
-	mvaddch((int) posY, (int) posX, '@');
+	velocityX = 0.000002; // debug
+	velocityY = 0.000001; // debug
+	posX = calcPos(timeDiff_usec, posX, velocityX);
+	posY = calcPos(timeDiff_usec, posY, velocityY);
+	mvaddch(intPos(posY), intPos(posX), '@');
 }
