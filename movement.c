@@ -23,8 +23,28 @@ long long getTimeDiff_usec() {
 void calcPos(long long timeDiff_usec) {
 	velocityX = 0.000002; // debug
 	velocityY = 0.000001; // debug
-	posX = posX + velocityX * timeDiff_usec,
-	posY = posY + velocityY * timeDiff_usec;
+	float newPosX = posX + velocityX * timeDiff_usec,
+		  newPosY = posY + velocityY * timeDiff_usec;
+	int intPosX = (int) (posX + 0.5),
+		intPosY = (int) (posY + 0.5),
+		intNewPosX = (int) (newPosX + 0.5),
+		intNewPosY = (int) (newPosY + 0.5);
+	int diffIntPosX = intNewPosX - intPosX;
+	int diffIntPosY = intNewPosY - intPosY;
+	if (diffIntPosX > 1) {
+		newPosX = intPosX + 1.49;
+		intNewPosX = intPosX + 1;
+	} else if (diffIntPosX < -1) {
+		newPosX = intPosX - 1.5;
+		intNewPosX = intPosX - 1;
+	}
+	if (diffIntPosY > 1) {
+		newPosY = intPosY + 1.49;
+		intNewPosY = intPosY + 1;
+	} else if (diffIntPosY < -1) {
+		newPosY = intPosY - 1.5;
+		intNewPosY = intPosY - 1;
+	}
 }
 
 void movement() {
