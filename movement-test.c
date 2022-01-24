@@ -12,6 +12,7 @@ void initialize() {
 
 int main() {
 	initialize();
+	initialMovementSetup();
 	while (1) {
 		movement();
 		refresh();

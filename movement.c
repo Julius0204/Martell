@@ -7,10 +7,15 @@ long long currentTime_usec = 0;
 float posX = 0, posY = 0,
 	  velocityX = 0, velocityY = 0;
 long long accelerationTimeout_usec[4];
-accelerationTimeout_usec[0] = 0; const char directionLeft = 0;
-accelerationTimeout_usec[1] = 0; const char directionRight = 1;
-accelerationTimeout_usec[2] = 0; const char directionUp = 2;
-accelerationTimeout_usec[3] = 0; const char directionDown = 3;
+const char directionLeft = 0;
+const char directionRight = 1;
+const char directionUp = 2;
+const char directionDown = 3;
+
+void initialMovementSetup() {
+	for (int i = 0; i < 4; i++)
+		accelerationTimeout_usec[i] = 0;
+}
 
 long long getTimeDiff_usec() {
 	struct timeval newTime;
@@ -42,18 +47,19 @@ float calcPos(long long timeDiff_usec, float pos, float velocity) {
 }
 
 void acceleration(int inputKey) {
+	char direction;
 	if (inputKey == KEY_LEFT) {
-		char direction = directionLeft;
+		direction = directionLeft;
 	} else if (inputKey == KEY_RIGHT) {
-		char direction = directionRight;
+		direction = directionRight;
 	} else if (inputKey == KEY_UP) {
-		char direction = directionUp;
+		direction = directionUp;
 	} else if (inputKey == KEY_DOWN) {
-		char direction = directionDown;
+		direction = directionDown;
 	} else return;
-	if (accelerationTimeout_usec(direction) > currentTime_usec) return;
+	if (accelerationTimeout_usec[direction] > currentTime_usec) return;
 	long long timeout_usec = 100000;
-	accelerationTimeout_usec(direction) = currentTime_usec + timeout_usec;
+	accelerationTimeout_usec[direction] = currentTime_usec + timeout_usec;
 	float velocityChange = 0.000001;
 	if (direction == directionLeft) {
 		velocityX -= velocityChange;
@@ -70,8 +76,6 @@ void movement() {
 	int inputKey = getch();
 	long long timeDiff_usec = getTimeDiff_usec();
 	if (timeDiff_usec == 0) return;
-	velocityX = 0.000002; // debug
-	velocityY = 0.000001; // debug
 	mvaddch(intPos(posY), intPos(posX), ' ');
 	posX = calcPos(timeDiff_usec, posX, velocityX);
 	posY = calcPos(timeDiff_usec, posY, velocityY);

@@ -2,5 +2,6 @@
 #define MOVEMENT_H
 
 void movement();
+void initialMovementSetup();
 
 #endif // MOVEMENT_H
