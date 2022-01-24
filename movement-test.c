@@ -7,6 +7,7 @@ void initialize() {
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
 }
 
 int main() {
