@@ -13,11 +13,6 @@ const char directionRight = 1;
 const char directionUp = 2;
 const char directionDown = 3;
 
-void initialMovementSetup() {
-	for (int i = 0; i < 4; i++)
-		accelerationTimeout_usec[i] = 0;
-}
-
 long long getTimeDiff_usec() {
 	struct timeval newTime;
 	gettimeofday(&newTime, 0);
@@ -120,12 +115,19 @@ void acceleration(int inputKey) {
 	}
 }
 
+void initialMovementSetup() {
+	for (int i = 0; i < 4; i++)
+		accelerationTimeout_usec[i] = 0;
+	mvaddch(intPos(posY), intPos(posX), '@');
+}
+
 long long movement(int inputKey) {
 	long long timeDiff_usec = getTimeDiff_usec();
-	if (timeDiff_usec == 0) return 0;
-	mvaddch(intPos(posY), intPos(posX), ' ');
-	setPos(timeDiff_usec);
-	mvaddch(intPos(posY), intPos(posX), '@');
+	if (timeDiff_usec > 0 && (velocityX != 0 || velocityY != 0)) {
+		mvaddch(intPos(posY), intPos(posX), ' ');
+		setPos(timeDiff_usec);
+		mvaddch(intPos(posY), intPos(posX), '@');
+	}
 	acceleration(inputKey);
 	return timeDiff_usec;
 }
