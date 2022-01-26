@@ -1,7 +1,7 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
-void movement();
+long long movement();
 void initialMovementSetup();
 
 #endif // MOVEMENT_H

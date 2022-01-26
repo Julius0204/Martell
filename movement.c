@@ -120,12 +120,13 @@ void acceleration(int inputKey) {
 	}
 }
 
-void movement() {
+long long movement() {
 	int inputKey = getch();
 	long long timeDiff_usec = getTimeDiff_usec();
-	if (timeDiff_usec == 0) return;
+	if (timeDiff_usec == 0) return 0;
 	mvaddch(intPos(posY), intPos(posX), ' ');
 	setPos(timeDiff_usec);
 	mvaddch(intPos(posY), intPos(posX), '@');
 	acceleration(inputKey);
+	return timeDiff_usec;
 }
