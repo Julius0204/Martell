@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
 	initialMovementSetup();
 	long long fullTimeDiff_usec = 0;
 	long counter = 0;
-	while (1) {
-		fullTimeDiff_usec += movement();
+	for (int inputKey = getch(); inputKey != 'q'; inputKey = getch()) {
+		fullTimeDiff_usec += movement(inputKey);
 		refresh();
 		counter++;
 	}
