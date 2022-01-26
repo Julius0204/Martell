@@ -1,6 +1,7 @@
 #include "movement.h"
 #include <sys/time.h>
 #include <ncurses.h>
+#include <stdbool.h>
 
 long long lastTime_usec = 0;
 long long currentTime_usec = 0;
@@ -50,6 +51,30 @@ float calcPos(long long timeDiff_usec, float pos, float velocity) {
 	return newPos;
 }
 
+bool collision(collisionAreaX, collisionAreaY) {
+	if (isObstacle(collisionAreaX, collisionAreaY) ||
+			isObstacle(collisionAreaX, collisionAreaY + 1) ||
+			isObstacle(collisionAreaX + 1, collisionAreaY) ||
+			isObstacle(collisionAreaX + 1, collisionAreaY + 1))
+		return true;
+	else
+		return false;
+}
+
+void setPos(long long timeDiff_usec) {
+	float newPosX = calcPos(timeDiff_usec, posX, velocityX),
+		  newPosY = calcPos(timeDiff_usec, posY, velocityY);
+	bool sameCollisionAreaX = collisionArea(newPosX) == collisionArea(posX);
+	bool sameCollisionAreaY = collisionArea(newPosY) == collisionArea(posY);
+	bool sameCollisionArea = sameCollisionAreaX && sameCollisionAreaY;
+	if (sameCollisionArea ||
+			!collision(collisionArea(newPosX), collisionArea(newPosY))) {
+		posX = newPosX;
+		posY = newPosY;
+		return;
+	}
+}
+
 void acceleration(int inputKey) {
 	char direction;
 	if (inputKey == KEY_LEFT) {
@@ -81,8 +106,7 @@ void movement() {
 	long long timeDiff_usec = getTimeDiff_usec();
 	if (timeDiff_usec == 0) return;
 	mvaddch(intPos(posY), intPos(posX), ' ');
-	posX = calcPos(timeDiff_usec, posX, velocityX);
-	posY = calcPos(timeDiff_usec, posY, velocityY);
+	setPos(timeDiff_usec);
 	mvaddch(intPos(posY), intPos(posX), '@');
 	acceleration(inputKey);
 }
