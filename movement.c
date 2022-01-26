@@ -90,6 +90,8 @@ void setPos(long long timeDiff_usec) {
 		posY = newPosY;
 		return;
 	}
+	velocityX = 0;
+	velocityY = 0;
 }
 
 void acceleration(int inputKey) {
