@@ -35,13 +35,17 @@ int intPos(float pos) {
 	return (int) (pos + 0.5);
 }
 
+int collisionArea(float pos) {
+	return (int) pos;
+}
+
 float calcPos(long long timeDiff_usec, float pos, float velocity) {
 	float newPos = pos + velocity * timeDiff_usec;
-	int diffIntPos = intPos(newPos) - intPos(pos);
-	if (diffIntPos > 1) {
-		newPos = intPos(pos) + 1.49;
-	} else if (diffIntPos < -1) {
-		newPos = intPos(pos) - 1.5;
+	int diffCollisionArea = collisionArea(newPos) - collisionArea(pos);
+	if (diffCollisionArea > 1) {
+		newPos = collisionArea(pos) + 1.99;
+	} else if (diffCollisionArea < -1) {
+		newPos = collisionArea(pos) - 1.0;
 	}
 	return newPos;
 }
