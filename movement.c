@@ -56,6 +56,16 @@ float calcPos(long long timeDiff_usec, float pos, float velocity) {
 }
 
 bool isObstacle(int x, int y) {
+	if (x < 0 || y < 0)
+		return true;
+	else {
+		int xMax, yMax;
+		getmaxyx(stdscr, yMax, xMax);
+		if (x >= xMax || y >= yMax)
+			return true;
+		else
+			return false;
+	}
 }
 
 bool collision(int collisionAreaX, int collisionAreaY) {
