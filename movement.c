@@ -37,7 +37,11 @@ int intPos(float pos) {
 }
 
 int collisionArea(float pos) {
-	return (int) pos;
+	if (pos < 0) {
+		int shift = 1 - (int) pos;
+		return (int) (pos + shift) - shift;
+	} else
+		return (int) pos;
 }
 
 float calcPos(long long timeDiff_usec, float pos, float velocity) {
@@ -51,7 +55,10 @@ float calcPos(long long timeDiff_usec, float pos, float velocity) {
 	return newPos;
 }
 
-bool collision(collisionAreaX, collisionAreaY) {
+bool isObstacle(int x, int y) {
+}
+
+bool collision(int collisionAreaX, int collisionAreaY) {
 	if (isObstacle(collisionAreaX, collisionAreaY) ||
 			isObstacle(collisionAreaX, collisionAreaY + 1) ||
 			isObstacle(collisionAreaX + 1, collisionAreaY) ||
