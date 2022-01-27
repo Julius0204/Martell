@@ -108,17 +108,7 @@ void setPos(long long timeDiff_usec) {
 	velocityY = 0;
 }
 
-void acceleration(int inputKey) {
-	char direction;
-	if (inputKey == KEY_LEFT) {
-		direction = directionLeft;
-	} else if (inputKey == KEY_RIGHT) {
-		direction = directionRight;
-	} else if (inputKey == KEY_UP) {
-		direction = directionUp;
-	} else if (inputKey == KEY_DOWN) {
-		direction = directionDown;
-	} else return;
+void acceleration(char direction) {
 	if (accelerationTimeout_usec[direction] > currentTime_usec) return;
 	long long timeout_usec = 100000;
 	accelerationTimeout_usec[direction] = currentTime_usec + timeout_usec;
@@ -131,6 +121,18 @@ void acceleration(int inputKey) {
 		velocityY -= velocityChange;
 	} else if (direction == directionDown) {
 		velocityY += velocityChange;
+	}
+}
+
+void evaluateInput(int inputKey) {
+	if (inputKey == KEY_LEFT) {
+		acceleration(directionLeft);
+	} else if (inputKey == KEY_RIGHT) {
+		acceleration(directionRight);
+	} else if (inputKey == KEY_UP) {
+		acceleration(directionUp);
+	} else if (inputKey == KEY_DOWN) {
+		acceleration(directionDown);
 	}
 }
 
@@ -147,6 +149,6 @@ long long movement(int inputKey) {
 		setPos(timeDiff_usec);
 		mvaddch(intPos(posY), intPos(posX), '@');
 	}
-	acceleration(inputKey);
+	evaluateInput(inputKey);
 	return timeDiff_usec;
 }
