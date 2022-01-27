@@ -92,20 +92,32 @@ bool collision(int collisionAreaX, int collisionAreaY) {
 		return false;
 }
 
+float normalCollision(float pos, float *velocity) {
+	if (*velocity > 0) {
+		pos = collisionArea(pos) + 0.99;
+	} else if (*velocity < 0) {
+		pos = collisionArea(pos);
+	}
+	*velocity = 0;
+	return pos;
+}
+
 void setPos(long long timeDiff_usec) {
 	float newPosX = calcPos(timeDiff_usec, posX, velocityX),
 		  newPosY = calcPos(timeDiff_usec, posY, velocityY);
 	bool sameCollisionAreaX = collisionArea(newPosX) == collisionArea(posX);
 	bool sameCollisionAreaY = collisionArea(newPosY) == collisionArea(posY);
 	bool sameCollisionArea = sameCollisionAreaX && sameCollisionAreaY;
-	if (sameCollisionArea ||
-			!collision(collisionArea(newPosX), collisionArea(newPosY))) {
-		posX = newPosX;
-		posY = newPosY;
-		return;
+	if (!sameCollisionArea &&
+			collision(collisionArea(newPosX), collisionArea(newPosY))) {
+		if (sameCollisionAreaY) {
+			newPosX = normalCollision(posX, &velocityX);
+		} else if (sameCollisionAreaX) {
+			newPosY = normalCollision(posY, &velocityY);
+		}
 	}
-	velocityX = 0;
-	velocityY = 0;
+	posX = newPosX;
+	posY = newPosY;
 }
 
 void acceleration(char direction) {
