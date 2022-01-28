@@ -19,6 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "mapgen.h"
 #include <stdlib.h>
+#include <ncurses.h>
 
 // Heightmap:
 
@@ -62,4 +63,22 @@ void refPad(short x) {
 	short xMax, yMax;
 	getmaxyx(stdscr, yMax, xMax);
 	prefresh(map, 0, x - xMax/2, yMax - padHeight, xMax/2 - x, yMax-1, xMax-1);
+
 }
+
+WINDOW *init_new_win(int height, int length, int y_start, int x_start){
+	WINDOW *main_win;
+	main_win = newwin(height,length,y_start,x_start);
+	box(main_win,0,0);
+	wrefresh(main_win);
+	return main_win;
+}
+void delete_Windows(WINDOW *main_win){
+	wborder(main_win,' ',' ', ' ',' ', ' ',' ', ' ',' ');
+	wrefresh(main_win);
+	delwin(main_win);
+}
+
+
+
+

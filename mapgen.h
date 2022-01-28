@@ -40,4 +40,6 @@ WINDOW *map;
 void genPad();
 void refPad(short x);
 
+WINDOW *init_new_win(int height, int length, int y_start, int x_start);
+void delete_Windows(WINDOW *main_win);
 #endif // MAPGEN_H
