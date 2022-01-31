@@ -32,6 +32,8 @@ const char directionRight = 1;
 const char directionUp = 2;
 const char directionDown = 3;
 
+bool collision();
+
 long long getTimeDiff_usec() {
 	struct timeval newTime;
 	gettimeofday(&newTime, 0);
@@ -56,6 +58,14 @@ int collisionArea(float pos) {
 		return (int) (pos + shift) - shift;
 	} else
 		return (int) pos;
+}
+
+bool onGround() {
+	if (posY - collisionArea(posY) > 0.9 &&
+			collision(collisionArea(posX), collisionArea(posY) + 1))
+		return true;
+	else
+		return false;
 }
 
 float calcPos(long long timeDiff_usec, float pos, float velocity) {
