@@ -15,7 +15,7 @@ WINDOW *create_newwin(int Hohe, int Breite, int ystart, int xstart){
 }
 
 int main(){
-	int input, x = 15, y = 10, H = 8, B = 8;
+	int input, x = 20, y = 10, H = 8, B = 8;
 
 	initscr(); //clears the screen
 		
@@ -26,54 +26,60 @@ int main(){
 	WINDOW* figure = create_newwin(H,B,x,y);
 
 
-
-
+	
+	
+			
         while ((input=getch())!= 'q')
-        {
-                switch(input)
-                {
-                        case KEY_LEFT :
-				 if (x>0)
-				--x;	 
-        			wclear(figure);
-        			wprintw(figure, "    o>\n   /|/\n    X\n    \\\\");
-        			wrefresh(figure);
-        			napms(100);
-        			wclear(figure);
-        			wprintw(figure, "    o>\n    |\n    X\n    //");
-        			wrefresh(figure);
-        			napms(100);
+	{
+		while( (input = getch()) == ERR) {}
+		
+                			switch(input)
+                			{
+					
+                        			case KEY_LEFT :
+				 		if (x>0)
+						--x;
+
+						//delwin(figure);
+        					wclear(figure);	
+        					wprintw(figure, "    o>\n   /|/\n    X\n    \\\\");
+        					wrefresh(figure);
+        					napms(40);
+						wclear(figure);
+        					wprintw(figure, "    o>\n    |\n    X\n    //");
+        					wrefresh(figure);
+        					napms(40);
+						break;
+
+                        			case KEY_RIGHT 	: 
+						if (x<(COLS-16)) 
+						++x;
+						//delwin(figure);
+						wclear(figure);
+                                		wprintw(figure, "    o>\n   /|/\n    X\n    \\\\");
+                                		wrefresh(figure);
+                                		napms(40);
+						wclear(figure);
+                                		wprintw(figure, "    o>\n    |\n    X\n    //");
+                                		wrefresh(figure);
+                                		napms(40);
+						break;
+
+                        			case ' ' :
+						if (y >= 19) y-=2;
+ 	                        		break;
+						while(getch() != ERR) {}
 				
-				
-				break;
-
-                        case KEY_RIGHT 	: 
-				if (x<(COLS-16)) 
-				++x;
-				wclear(figure);
-                                wprintw(figure, "    o>\n   /|/\n    X\n    \\\\");
-                                wrefresh(figure);
-                                napms(100);
-                                wclear(figure);
-                                wprintw(figure, "    o>\n    |\n    X\n    //");
-                                wrefresh(figure);
-                                napms(100);
-
-
-				break;
-
-                        case ' ' :
-				if (y >= 19) y-=2;
- 	                        break;
-				
-                }
+                			}		
                 mvwin(figure, y, x); //move window according to x and y
                 wrefresh(figure); // wrefresh copiesthe window to the physical terminal screen
-        //wclear(figure); //it clears the screen on the next call
-        }
-        delwin(figure);
-        endwin();
-        return 0;
-	
+		//wclear(figure); //it clears the screen on the next call
+	}
+         
+	delwin(figure);	
+	endwin();
+
 }
+        
+    
 
