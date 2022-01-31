@@ -107,11 +107,13 @@ bool collision(int collisionAreaX, int collisionAreaY) {
 		return false;
 }
 
-float resolveCollision(float pos, float *velocity) {
-	if (*velocity > 0) {
-		pos = collisionArea(pos) + 0.99;
-	} else if (*velocity < 0) {
-		pos = collisionArea(pos);
+float resolveCollision(float pos, float newPos, float *velocity) {
+	int currentCollisionArea = collisionArea(pos);
+	int newCollisionArea = collisionArea(newPos);
+	if (newCollisionArea > currentCollisionArea) {
+		pos = currentCollisionArea + 0.99;
+	} else if (newCollisionArea < currentCollisionArea) {
+		pos = currentCollisionArea;
 	}
 	*velocity = 0;
 	return pos;
@@ -127,9 +129,9 @@ void setPos(long long timeDiff_usec) {
 	if (!sameCollisionArea &&
 			collision(collisionArea(newPosX), collisionArea(newPosY))) {
 		if (!sameCollisionAreaX)
-			newPosX = resolveCollision(posX, &velocityX);
+			newPosX = resolveCollision(posX, newPosX, &velocityX);
 		if (!sameCollisionAreaY)
-			newPosY = resolveCollision(posY, &velocityY);
+			newPosY = resolveCollision(posY, newPosY, &velocityY);
 	}
 	posX = newPosX;
 	posY = newPosY;
