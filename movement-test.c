@@ -27,6 +27,7 @@ void initialize() {
 	noecho();
 	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
+	curs_set(0);
 }
 
 int main(int argc, char *argv[]) {
