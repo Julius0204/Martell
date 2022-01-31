@@ -18,17 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "movement.h"
+#include "customCurses.h"
 #include <stdio.h>
 #include <ncurses.h>
-
-void initialize() {
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr, TRUE);
-	nodelay(stdscr, TRUE);
-	curs_set(0);
-}
 
 int main(int argc, char *argv[]) {
 	initialize();

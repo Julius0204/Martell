@@ -24,6 +24,8 @@ void initialize() {
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
+	nodelay(stdscr, TRUE);
+	curs_set(0);
 }
 
 char left(int ch) {

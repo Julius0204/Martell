@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "movement.h"
+#include "customCurses.h"
 #include <sys/time.h>
 #include <ncurses.h>
 #include <stdbool.h>
@@ -152,13 +153,13 @@ void acceleration(char direction) {
 }
 
 void evaluateInput(int inputKey) {
-	if (inputKey == KEY_LEFT) {
+	if (left(inputKey)) {
 		acceleration(directionLeft);
-	} else if (inputKey == KEY_RIGHT) {
+	} else if (right(inputKey)) {
 		acceleration(directionRight);
-	} else if (inputKey == KEY_UP) {
+	} else if (up(inputKey)) {
 		acceleration(directionUp);
-	} else if (inputKey == KEY_DOWN) {
+	} else if (down(inputKey)) {
 		acceleration(directionDown);
 	}
 }
