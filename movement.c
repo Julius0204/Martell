@@ -167,7 +167,7 @@ void evaluateInput(int inputKey) {
 void initialMovementSetup() {
 	for (int i = 0; i < 4; i++)
 		accelerationTimeout_usec[i] = 0;
-	mvaddch(intPos(posY), intPos(posX), '@');
+	mvaddch(intPos(posY), intPos(posX), 'A');
 }
 
 long long movement(int inputKey) {
@@ -176,7 +176,7 @@ long long movement(int inputKey) {
 			(velocityX != 0 || velocityY != 0 || !onGround())) {
 		mvaddch(intPos(posY), intPos(posX), ' ');
 		setPos(timeDiff_usec);
-		mvaddch(intPos(posY), intPos(posX), '@');
+		mvaddch(intPos(posY), intPos(posX), 'A');
 	}
 	evaluateInput(inputKey);
 	return timeDiff_usec;
