@@ -68,8 +68,13 @@ bool onGround() {
 		return false;
 }
 
-float calcPos(long long timeDiff_usec, float pos, float velocity) {
-	float newPos = pos + velocity * timeDiff_usec;
+float calcPos(long long timeDiff_usec, float pos, float *velocity, bool gravity) {
+	float newPos = pos + *velocity * timeDiff_usec;
+	if (gravity) {
+		float gravitationalAcceleration = 0.000000000001;
+		newPos += 0.5 * gravitationalAcceleration * timeDiff_usec * timeDiff_usec;
+		*velocity += gravitationalAcceleration * timeDiff_usec;
+	}
 	int diffCollisionArea = collisionArea(newPos) - collisionArea(pos);
 	if (diffCollisionArea > 1) {
 		newPos = collisionArea(pos) + 1.99;
@@ -113,8 +118,9 @@ float resolveCollision(float pos, float *velocity) {
 }
 
 void setPos(long long timeDiff_usec) {
-	float newPosX = calcPos(timeDiff_usec, posX, velocityX),
-		  newPosY = calcPos(timeDiff_usec, posY, velocityY);
+	float newPosX = calcPos(timeDiff_usec, posX, &velocityX, false),
+		  newPosY = calcPos(timeDiff_usec, posY, &velocityY,
+				!onGround() || velocityY < 0);
 	bool sameCollisionAreaX = collisionArea(newPosX) == collisionArea(posX);
 	bool sameCollisionAreaY = collisionArea(newPosY) == collisionArea(posY);
 	bool sameCollisionArea = sameCollisionAreaX && sameCollisionAreaY;
@@ -165,7 +171,8 @@ void initialMovementSetup() {
 
 long long movement(int inputKey) {
 	long long timeDiff_usec = getTimeDiff_usec();
-	if (timeDiff_usec > 0 && (velocityX != 0 || velocityY != 0)) {
+	if (timeDiff_usec > 0 &&
+			(velocityX != 0 || velocityY != 0 || !onGround())) {
 		mvaddch(intPos(posY), intPos(posX), ' ');
 		setPos(timeDiff_usec);
 		mvaddch(intPos(posY), intPos(posX), '@');
