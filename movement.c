@@ -146,10 +146,8 @@ void acceleration(char direction) {
 		velocityX -= velocityChange;
 	} else if (direction == directionRight) {
 		velocityX += velocityChange;
-	} else if (direction == directionUp) {
-		velocityY -= velocityChange;
-	} else if (direction == directionDown) {
-		velocityY += velocityChange;
+	} else if (direction == directionUp && onGround()) {
+		velocityY = -0.000005;
 	}
 }
 
