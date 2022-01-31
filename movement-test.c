@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
 	long counter = 0;
 	for (int inputKey = getch(); inputKey != 'q'; inputKey = getch()) {
 		fullTimeDiff_usec += movement(inputKey);
-		refresh();
 		counter++;
 	}
 	endwin();

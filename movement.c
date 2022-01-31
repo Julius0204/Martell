@@ -164,6 +164,14 @@ void evaluateInput(int inputKey) {
 	}
 }
 
+void updateScreen(int oldIntPosX, int oldIntPosY) {
+	if (oldIntPosX != intPos(posX) || oldIntPosY != intPos(posY)) {
+		mvaddch(oldIntPosY, oldIntPosX, ' ');
+		mvaddch(intPos(posY), intPos(posX), 'A');
+		refresh();
+	}
+}
+
 void initialMovementSetup() {
 	for (int i = 0; i < 4; i++)
 		accelerationTimeout_usec[i] = 0;
@@ -174,9 +182,9 @@ long long movement(int inputKey) {
 	long long timeDiff_usec = getTimeDiff_usec();
 	if (timeDiff_usec > 0 &&
 			(velocityX != 0 || velocityY != 0 || !onGround())) {
-		mvaddch(intPos(posY), intPos(posX), ' ');
+		int oldIntPosX = intPos(posX), oldIntPosY = intPos(posY);
 		setPos(timeDiff_usec);
-		mvaddch(intPos(posY), intPos(posX), 'A');
+		updateScreen(oldIntPosX, oldIntPosY);
 	}
 	evaluateInput(inputKey);
 	return timeDiff_usec;
