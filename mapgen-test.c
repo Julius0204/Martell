@@ -47,6 +47,7 @@ int main_window(int y_start) {
 	noecho();
 	windows = init_new_win(height, length, y_start, x_start);
 	wrefresh(windows);
+	refresh();
 }
 
 void padHeightmap() {
@@ -54,17 +55,35 @@ void padHeightmap() {
 	initialize();
 	refresh();
 	genPad();
+	refresh();
 	int x = 0;
 	int y = 20;
 	do {
 		refPad(x);
-		main_window(y);
+		WINDOW* windows;
+        	int height,length, x_start, input;
+        	initscr();
+        	cbreak();
+        	height = 10;
+        	length = 10;
+        	x_start = 20;
+        	keypad(stdscr, TRUE);
+        	refresh();
+        	noecho();
+        	windows = init_new_win(height, length, y, x_start);
+        	wrefresh(windows);
+        	refresh();
+
                 refresh();
 		int ch = getch();
 		if (right(ch)) x++;
 		else if (left(ch)) x--;
 		else if (up(ch)) y--;
-		else if (down(ch)) y++;
+		else if (down(ch)){
+			y++;
+			delete_Windows(windows);
+
+		}
 		else if (ch != KEY_RESIZE) break;
 	} while (true);
 	endwin();
