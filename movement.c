@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 long long lastTime_usec = 0;
 long long currentTime_usec = 0;
-float posX = 0, posY = 0,
+double posX = 0, posY = 0,
 	  velocityX = 0, velocityY = 0;
 long long accelerationTimeout_usec[4];
 const char directionLeft = 0;
@@ -48,11 +48,11 @@ long long getTimeDiff_usec() {
 	return timeDiff_usec;
 }
 
-int intPos(float pos) {
+int intPos(double pos) {
 	return (int) (pos + 0.5);
 }
 
-int collisionArea(float pos) {
+int collisionArea(double pos) {
 	if (pos < 0) {
 		int shift = 1 - (int) pos;
 		return (int) (pos + shift) - shift;
@@ -68,10 +68,10 @@ bool onGround() {
 		return false;
 }
 
-float calcPos(long long timeDiff_usec, float pos, float *velocity, bool gravity) {
-	float newPos = pos + *velocity * timeDiff_usec;
+double calcPos(long long timeDiff_usec, double pos, double *velocity, bool gravity) {
+	double newPos = pos + *velocity * timeDiff_usec;
 	if (gravity) {
-		float gravitationalAcceleration = 0.000000000001;
+		double gravitationalAcceleration = 0.000000000001;
 		newPos += 0.5 * gravitationalAcceleration * timeDiff_usec * timeDiff_usec;
 		*velocity += gravitationalAcceleration * timeDiff_usec;
 	}
@@ -107,7 +107,7 @@ bool collision(int collisionAreaX, int collisionAreaY) {
 		return false;
 }
 
-float resolveCollision(float pos, float newPos, float *velocity) {
+double resolveCollision(double pos, double newPos, double *velocity) {
 	int currentCollisionArea = collisionArea(pos);
 	int newCollisionArea = collisionArea(newPos);
 	if (newCollisionArea > currentCollisionArea) {
@@ -120,7 +120,7 @@ float resolveCollision(float pos, float newPos, float *velocity) {
 }
 
 void setPos(long long timeDiff_usec) {
-	float newPosX = calcPos(timeDiff_usec, posX, &velocityX, false),
+	double newPosX = calcPos(timeDiff_usec, posX, &velocityX, false),
 		  newPosY = calcPos(timeDiff_usec, posY, &velocityY,
 				!onGround() || velocityY < 0);
 	bool sameCollisionAreaX = collisionArea(newPosX) == collisionArea(posX);
@@ -141,7 +141,7 @@ void acceleration(char direction) {
 	if (accelerationTimeout_usec[direction] > currentTime_usec) return;
 	long long timeout_usec = 100000;
 	accelerationTimeout_usec[direction] = currentTime_usec + timeout_usec;
-	float velocityChange = 0.000001;
+	double velocityChange = 0.000001;
 	if (direction == directionLeft) {
 		velocityX -= velocityChange;
 	} else if (direction == directionRight) {
