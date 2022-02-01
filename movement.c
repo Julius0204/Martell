@@ -26,7 +26,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 long long lastTime_usec = 0;
 long long currentTime_usec = 0;
 double posX = 0, posY = 0,
-	  velocityX = 0, velocityY = 0;
+	velocityX = 0, velocityY = 0;
 long long accelerationTimeout_usec[4];
 const char directionLeft = 0;
 const char directionRight = 1;
@@ -122,7 +122,7 @@ double resolveCollision(double pos, double newPos, double *velocity) {
 
 void setPos(long long timeDiff_usec) {
 	double newPosX = calcPos(timeDiff_usec, posX, &velocityX, false),
-		  newPosY = calcPos(timeDiff_usec, posY, &velocityY,
+		newPosY = calcPos(timeDiff_usec, posY, &velocityY,
 				!onGround() || velocityY < 0);
 	bool sameCollisionAreaX = collisionArea(newPosX) == collisionArea(posX);
 	bool sameCollisionAreaY = collisionArea(newPosY) == collisionArea(posY);
