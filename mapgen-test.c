@@ -78,7 +78,10 @@ void padHeightmap() {
 		int ch = getch();
 		if (right(ch)) x++;
 		else if (left(ch)) x--;
-		else if (up(ch)) y--;
+		else if (up(ch)){
+			y--;
+			delete_Windows(windows);
+		}
 		else if (down(ch)){
 			y++;
 			delete_Windows(windows);
