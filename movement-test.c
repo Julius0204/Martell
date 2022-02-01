@@ -19,11 +19,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "movement.h"
 #include "customCurses.h"
+#include "mapgen.h"
 #include <stdio.h>
 #include <ncurses.h>
 
 int main(int argc, char *argv[]) {
+	genHeightmap();
 	initialize();
+	refresh();
+	genPad();
 	initialMovementSetup();
 	long long fullTimeDiff_usec = 0;
 	long counter = 0;

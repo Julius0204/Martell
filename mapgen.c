@@ -63,3 +63,7 @@ void refPad(short x) {
 	getmaxyx(stdscr, yMax, xMax);
 	prefresh(map, 0, x - xMax/2, yMax - padHeight, xMax/2 - x, yMax-1, xMax-1);
 }
+
+void mvPadaddch(int y, int x, const chtype ch) {
+	mvwaddch(map, maxHeightDiff - 1 + y, x, ch);
+}

@@ -19,13 +19,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "movement.h"
 #include "customCurses.h"
+#include "mapgen.h"
 #include <sys/time.h>
 #include <ncurses.h>
 #include <stdbool.h>
 
 long long lastTime_usec = 0;
 long long currentTime_usec = 0;
-double posX = 0, posY = 0,
+double posX = 0, posY = -0.01,
 	velocityX = 0, velocityY = 0;
 long long accelerationTimeout_usec[4];
 const char directionLeft = 0;
@@ -49,16 +50,21 @@ long long getTimeDiff_usec() {
 	return timeDiff_usec;
 }
 
+int posToInt(double pos, double shift) {
+	double shiftPos = pos + shift;
+	if (shiftPos < 0) {
+		int tmpShift = 1 - (int) shiftPos;
+		return (int) (shiftPos + tmpShift) - tmpShift;
+	} else
+		return (int) shiftPos;
+}
+
 int intPos(double pos) {
-	return (int) (pos + 0.5);
+	return posToInt(pos, 0.5);
 }
 
 int collisionArea(double pos) {
-	if (pos < 0) {
-		int shift = 1 - (int) pos;
-		return (int) (pos + shift) - shift;
-	} else
-		return (int) pos;
+	return posToInt(pos, 0);
 }
 
 bool onGround() {
@@ -86,16 +92,10 @@ double calcPos(long long timeDiff_usec, double pos, double *velocity, bool gravi
 }
 
 bool isObstacle(int x, int y) {
-	if (x < 0 || y < 0)
+	if (x < 0 || x >= mapLength || -y < heightmap[x])
 		return true;
-	else {
-		int xMax, yMax;
-		getmaxyx(stdscr, yMax, xMax);
-		if (x >= xMax || y >= yMax)
-			return true;
-		else
-			return false;
-	}
+	else
+		return false;
 }
 
 bool collision(int collisionAreaX, int collisionAreaY) {
@@ -166,16 +166,17 @@ void evaluateInput(int inputKey) {
 
 void updateScreen(int oldIntPosX, int oldIntPosY) {
 	if (oldIntPosX != intPos(posX) || oldIntPosY != intPos(posY)) {
-		mvaddch(oldIntPosY, oldIntPosX, ' ');
-		mvaddch(intPos(posY), intPos(posX), 'A');
-		refresh();
+		mvPadaddch(oldIntPosY, oldIntPosX, ' ');
+		mvPadaddch(intPos(posY), intPos(posX), 'A');
+		refPad(intPos(posX));
 	}
 }
 
 void initialMovementSetup() {
 	for (int i = 0; i < 4; i++)
 		accelerationTimeout_usec[i] = 0;
-	mvaddch(intPos(posY), intPos(posX), 'A');
+	mvPadaddch(intPos(posY), intPos(posX), 'A');
+	refPad(intPos(posX));
 }
 
 long long movement(int inputKey) {

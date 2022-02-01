@@ -39,5 +39,6 @@ WINDOW *map;
 
 void genPad();
 void refPad(short x);
+void mvPadaddch();
 
 #endif // MAPGEN_H
