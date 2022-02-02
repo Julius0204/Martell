@@ -78,7 +78,7 @@ bool onGround() {
 double calcPos(long long timeDiff_usec, double pos, double *velocity, bool gravity) {
 	double newPos = pos + *velocity * timeDiff_usec;
 	if (gravity) {
-		double gravitationalAcceleration = 0.000000000001;
+		double gravitationalAcceleration = 0.00000000002;
 		newPos += 0.5 * gravitationalAcceleration * timeDiff_usec * timeDiff_usec;
 		*velocity += gravitationalAcceleration * timeDiff_usec;
 	}
@@ -142,13 +142,13 @@ void acceleration(char direction) {
 	if (accelerationTimeout_usec[direction] > currentTime_usec) return;
 	long long timeout_usec = 100000;
 	accelerationTimeout_usec[direction] = currentTime_usec + timeout_usec;
-	double velocityChange = 0.000001;
+	double velocityChange = 0.000002;
 	if (direction == directionLeft) {
 		velocityX -= velocityChange;
 	} else if (direction == directionRight) {
 		velocityX += velocityChange;
 	} else if (direction == directionUp && onGround()) {
-		velocityY = -0.000005;
+		velocityY = -0.000015;
 	}
 }
 
