@@ -37,6 +37,8 @@ int main(int argc, char *argv[]) {
 	}
 	endwin();
 	long long averageTimeDiff_usec = fullTimeDiff_usec / counter;
-	printf("averageTimeDiff_usec: %lld\n", averageTimeDiff_usec);
+	printf("Avarage time per game tick: %lldμs\n", averageTimeDiff_usec);
+	printf("Total gameplay time: %lldμs\n",fullTimeDiff_usec);
+	printf("Total amount of game ticks: %lu\n",counter);
 	return 0;
 }
