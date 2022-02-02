@@ -17,11 +17,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "movement.h"
 #include "customCurses.h"
 #include "mapgen.h"
-#include <stdio.h>
+#include "movement.h"
 #include <ncurses.h>
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
 	genHeightmap();

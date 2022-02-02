@@ -31,11 +31,12 @@ void genHeightmap() {
 	const short entryLength = 10;
 	srand(0); // set seed for rand()
 	// x = horizontal position; y = vertical position
-	for (short x=0, y=0; x < mapLength; x++) {
+	for (short x = 0, y = 0; x < mapLength; x++) {
 		// y changes with a 50% chance:
-		if (x >= entryLength && rand()%2 == 0) {
-			// the chance of y getting higher or lower depends on the previous height:
-			if (rand() % (2*maxHeightDiff) >= maxHeightDiff + y)
+		if (x >= entryLength && rand() % 2 == 0) {
+			// the chance of y getting higher or lower depends on the previous
+			// height:
+			if (rand() % (2 * maxHeightDiff) >= maxHeightDiff + y)
 				y++;
 			else
 				y--;
@@ -50,10 +51,11 @@ short padHeight;
 WINDOW *map;
 
 void genPad() {
-	padHeight = 2*maxHeightDiff + 1;
+	padHeight = 2 * maxHeightDiff + 1;
 	map = newpad(padHeight, mapLength);
-	for (short x=0; x < mapLength; x++) {
-		mvwvline(map, maxHeightDiff - heightmap[x], x, '@', maxHeightDiff+1 + heightmap[x]);
+	for (short x = 0; x < mapLength; x++) {
+		mvwvline(map, maxHeightDiff - heightmap[x], x, '@',
+				 maxHeightDiff + 1 + heightmap[x]);
 	}
 }
 
@@ -61,7 +63,8 @@ void genPad() {
 void refPad(short x) {
 	short xMax, yMax;
 	getmaxyx(stdscr, yMax, xMax);
-	prefresh(map, 0, x - xMax/2, yMax - padHeight, xMax/2 - x, yMax-1, xMax-1);
+	prefresh(map, 0, x - xMax / 2, yMax - padHeight, xMax / 2 - x, yMax - 1,
+			 xMax - 1);
 }
 
 void mvPadaddch(int y, int x, const chtype ch) {
