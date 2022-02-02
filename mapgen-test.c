@@ -34,21 +34,6 @@ void printHeightmap() {
 		printf("%d\n", heightmap[x]);
 	}
 }
-int main_window(int y_start) {
-	WINDOW* windows;
-	int height,length, x_start, input;
-	initscr();
-	cbreak();
-	height = 10;
-	length = 10;
-	x_start = 20;
-	keypad(stdscr, TRUE);
-	refresh();
-	noecho();
-	windows = init_new_win(height, length, y_start, x_start);
-	wrefresh(windows);
-	refresh();
-}
 
 void padHeightmap() {
 	genHeightmap();
@@ -64,27 +49,24 @@ void padHeightmap() {
         	int height,length, x_start, input;
         	initscr();
         	cbreak();
-        	height = 10;
-        	length = 10;
+        	height = 1;
+        	length = 1;
         	x_start = 20;
         	keypad(stdscr, TRUE);
-        	refresh();
         	noecho();
+		curs_set(0);
         	windows = init_new_win(height, length, y, x_start);
-        	wrefresh(windows);
-        	refresh();
-
-                refresh();
+		wrefresh(windows);
 		int ch = getch();
 		if (right(ch)) x++;
 		else if (left(ch)) x--;
 		else if (up(ch)){
 			y--;
-			delete_Windows(windows);
+			mvwin(windows, y,x_start);
 		}
 		else if (down(ch)){
 			y++;
-			delete_Windows(windows);
+			mvwin(windows,y,x_start);
 
 		}
 		else if (ch != KEY_RESIZE) break;

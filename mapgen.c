@@ -69,15 +69,10 @@ void refPad(short x) {
 WINDOW *init_new_win(int height, int length, int y_start, int x_start){
 	WINDOW *main_win;
 	main_win = newwin(height,length,y_start,x_start);
-	box(main_win,0,0);
-	wrefresh(main_win);
+	waddch(main_win, 'A');
 	return main_win;
 }
-void delete_Windows(WINDOW *main_win){
-	wborder(main_win,' ',' ', ' ',' ', ' ',' ', ' ',' ');
-	wrefresh(main_win);
-	delwin(main_win);
-}
+
 
 
 
