@@ -9,7 +9,7 @@ WINDOW *create_newwin(int Hohe, int Breite, int ystart, int xstart){
 		WINDOW *Character = newwin(Hohe, Breite, ystart, xstart);
 		box(Character,0 ,0 );
 		return(Character);
-
+		// window movement source : https://stackoverflow.com/questions/35547346/move-a-window-ncurses
 
 
 }
