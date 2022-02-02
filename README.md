@@ -9,6 +9,27 @@
 - [Leon114m](https://github.com/Leon114m) - Developer
 - [denotavail](https://github.com/denotavail) - Developer
 
+## Installation
+
+### Dependencies
+
+- `gcc` (It probably also works with other C compilers.)
+- `ncurses`
+
+SuperCursey has been tested with gcc and ncurses on Ubuntu (native and in WSL) with x86-64 Hardware.
+
+### Compilation
+
+```
+gcc main.c movement.c customCurses.c mapgen.c -lncurses -o supercursey
+```
+
+### Execution
+
+```
+./supercursey
+```
+
 ## [License](COPYING)
 
 This file is part of SuperCursey.
