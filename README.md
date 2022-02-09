@@ -21,7 +21,7 @@ SuperCursey has been tested with gcc and ncurses on Ubuntu (native and in WSL) w
 ### Compilation
 
 ```
-gcc main.c movement.c customCurses.c mapgen.c -lncurses -o supercursey
+gcc main.c movement.c customCurses.c mapgen.c -lncurses -o supercursey -fcommon
 ```
 
 ### Execution
