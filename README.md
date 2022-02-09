@@ -16,7 +16,7 @@
 - `gcc` (It probably also works with other C compilers.)
 - `ncurses`
 
-SuperCursey has been tested with gcc and ncurses on Ubuntu (native and in WSL) with x86-64 Hardware.
+SuperCursey has been tested with gcc and ncurses on Ubuntu (native and in WSL) and Arch Linux with x86-64 Hardware.
 
 ### Compilation
 
