@@ -23,6 +23,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <ncurses.h>
 #include <stdio.h>
 
+#define sec_in_usec 1000000
+
+int usec_without_sec(char leadingZeroes[], long long inputTime_usec) {
+	int outputTime = inputTime_usec - inputTime_usec / sec_in_usec * sec_in_usec;
+	int leadingZeroesCount = 0;
+	for (int compare = sec_in_usec / 10; compare > outputTime; compare /= 10) {
+		leadingZeroes[leadingZeroesCount] = '0';
+		leadingZeroesCount++;
+	}
+	leadingZeroes[leadingZeroesCount] = 0;
+	return outputTime;
+}
+
+void printTime(char name[], long long time_usec) {
+	char leadingZeroes[7];
+	int time_usec_without_sec = usec_without_sec(leadingZeroes, time_usec);
+	printf("%s: %lld.%s%d s\n", name, time_usec / sec_in_usec, leadingZeroes, time_usec_without_sec);
+}
+
 int main(int argc, char *argv[]) {
 	genHeightmap();
 	initialize();
@@ -37,6 +56,8 @@ int main(int argc, char *argv[]) {
 	}
 	endwin();
 	long long averageTimeDiff_usec = fullTimeDiff_usec / counter;
-	printf("averageTimeDiff_usec: %lld\n", averageTimeDiff_usec);
+	printTime("Full gameplay time", fullTimeDiff_usec);
+	printTime("Average tick time", averageTimeDiff_usec);
+	printf("Tick count: %ld\n", counter);
 	return 0;
 }
