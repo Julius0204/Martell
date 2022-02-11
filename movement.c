@@ -146,7 +146,7 @@ void acceleration(char direction) {
 		velocityX -= velocityChange;
 	} else if (direction == directionRight) {
 		velocityX += velocityChange;
-	} else if (direction == directionUp && onGround()) {
+	} else if (direction == directionUp) {
 		velocityY = -0.000015;
 	}
 }
@@ -156,7 +156,7 @@ void evaluateInput(int inputKey) {
 		acceleration(directionLeft);
 	} else if (right(inputKey)) {
 		acceleration(directionRight);
-	} else if (up(inputKey)) {
+	} else if (up(inputKey) && onGround()) {
 		acceleration(directionUp);
 	} else if (down(inputKey)) {
 		acceleration(directionDown);
