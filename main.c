@@ -25,23 +25,37 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #define sec_in_usec 1000000
 
-int main(int argc, char *argv[]) {
+void initialCursesSetup() {
 	genHeightmap();
 	initialize();
 	refresh();
 	genPad();
-	initialMovementSetup();
-	long long fullTimeDiff_usec = 0;
-	long long counter = 0;
-	for (int inputKey = getch(); inputKey != 'q'; inputKey = getch()) {
-		fullTimeDiff_usec += movement(inputKey);
-		counter++;
-	}
-	endwin();
+}
+
+void printStats(long long fullTimeDiff_usec, long long counter) {
 	double fullTimeDiff_sec = (double)fullTimeDiff_usec / sec_in_usec;
 	double averageTimeDiff_sec = fullTimeDiff_sec / counter;
 	printf("Full gameplay time: %f s\n", fullTimeDiff_sec);
 	printf("Average tick time: %E s\n", averageTimeDiff_sec);
 	printf("Tick count: %lld\n", counter);
+}
+
+void mainLoop(long long *fullTimeDiff_usec, long long *counter) {
+	long long time_usec = 0;
+	long long accelerationTimeout_usec[4];
+	double pos[2], velocity[2];
+	initialMovementSetup(accelerationTimeout_usec, pos, velocity);
+	for (int inputKey = getch(); inputKey != 'q'; inputKey = getch()) {
+		*fullTimeDiff_usec += movement(&time_usec, accelerationTimeout_usec, pos, velocity, inputKey);
+		(*counter)++;
+	}
+}
+
+int main(int argc, char *argv[]) {
+	initialCursesSetup();
+	long long fullTimeDiff_usec = 0, counter = 0;
+	mainLoop(&fullTimeDiff_usec, &counter);
+	endwin();
+	printStats(fullTimeDiff_usec, counter);
 	return 0;
 }
