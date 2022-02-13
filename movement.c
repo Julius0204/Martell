@@ -24,11 +24,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdbool.h>
 #include <sys/time.h>
 
-const char Xcoordinate = 0,
-		   Ycoordinate = 1;
-const char directionLeft = 0,
-		   directionRight = 1,
-		   directionUp = 2,
+const char Xcoordinate = 0, Ycoordinate = 1;
+const char directionLeft = 0, directionRight = 1, directionUp = 2,
 		   directionDown = 3;
 
 bool collision();
@@ -36,7 +33,8 @@ bool collision();
 long long getTimeDiff_usec(long long *lastTime_usec) {
 	struct timeval newTime;
 	gettimeofday(&newTime, 0);
-	long long currentTime_usec = (long long)newTime.tv_sec * 1000000 + newTime.tv_usec;
+	long long currentTime_usec =
+		(long long)newTime.tv_sec * 1000000 + newTime.tv_usec;
 	if (*lastTime_usec == 0) {
 		*lastTime_usec = currentTime_usec;
 		return 0;
@@ -63,7 +61,8 @@ int collisionArea(double pos) { return posToInt(pos, 0); }
 
 bool onGround(double pos[]) {
 	if (pos[Ycoordinate] - collisionArea(pos[Ycoordinate]) > 0.9 &&
-		collision(collisionArea(pos[Xcoordinate]), collisionArea(pos[Ycoordinate]) + 1))
+		collision(collisionArea(pos[Xcoordinate]),
+				  collisionArea(pos[Ycoordinate]) + 1))
 		return true;
 	else
 		return false;
@@ -118,15 +117,19 @@ double resolveCollision(double pos, double newPos, double *velocity) {
 
 void setPos(long long timeDiff_usec, double pos[], double velocity[]) {
 	double newPos[2];
-	newPos[Xcoordinate] = calcPos(timeDiff_usec, pos[Xcoordinate], &velocity[Xcoordinate], false),
-	newPos[Ycoordinate] = calcPos(timeDiff_usec, pos[Ycoordinate], &velocity[Ycoordinate],
-							 !onGround(pos) || velocity[Ycoordinate] < 0);
+	newPos[Xcoordinate] =
+		calcPos(timeDiff_usec, pos[Xcoordinate], &velocity[Xcoordinate], false),
+	newPos[Ycoordinate] =
+		calcPos(timeDiff_usec, pos[Ycoordinate], &velocity[Ycoordinate],
+				!onGround(pos) || velocity[Ycoordinate] < 0);
 	bool sameCollisionAreaFor[2];
 	for (int i = 0; i < 2; i++)
-		sameCollisionAreaFor[i] = collisionArea(newPos[i]) == collisionArea(pos[i]);
-	bool sameCollisionArea = sameCollisionAreaFor[Xcoordinate] && sameCollisionAreaFor[Ycoordinate];
-	if (!sameCollisionArea &&
-		collision(collisionArea(newPos[Xcoordinate]), collisionArea(newPos[Ycoordinate]))) {
+		sameCollisionAreaFor[i] =
+			collisionArea(newPos[i]) == collisionArea(pos[i]);
+	bool sameCollisionArea =
+		sameCollisionAreaFor[Xcoordinate] && sameCollisionAreaFor[Ycoordinate];
+	if (!sameCollisionArea && collision(collisionArea(newPos[Xcoordinate]),
+										collisionArea(newPos[Ycoordinate]))) {
 		for (int i = 0; i < 2; i++) {
 			if (!sameCollisionAreaFor[i])
 				newPos[i] = resolveCollision(pos[i], newPos[i], &velocity[i]);
@@ -136,7 +139,8 @@ void setPos(long long timeDiff_usec, double pos[], double velocity[]) {
 		pos[i] = newPos[i];
 }
 
-void acceleration(char direction, long long time_usec, long long accelerationTimeout_usec[], double velocity[]) {
+void acceleration(char direction, long long time_usec,
+				  long long accelerationTimeout_usec[], double velocity[]) {
 	if (accelerationTimeout_usec[direction] > time_usec)
 		return;
 	long long timeout_usec = 100000;
@@ -151,22 +155,29 @@ void acceleration(char direction, long long time_usec, long long accelerationTim
 	}
 }
 
-void evaluateInput(int inputKey, long long time_usec, long long accelerationTimeout_usec[], double pos[], double velocity[]) {
+void evaluateInput(int inputKey, long long time_usec,
+				   long long accelerationTimeout_usec[], double pos[],
+				   double velocity[]) {
 	if (left(inputKey)) {
-		acceleration(directionLeft, time_usec, accelerationTimeout_usec, velocity);
+		acceleration(directionLeft, time_usec, accelerationTimeout_usec,
+					 velocity);
 	} else if (right(inputKey)) {
-		acceleration(directionRight, time_usec, accelerationTimeout_usec, velocity);
+		acceleration(directionRight, time_usec, accelerationTimeout_usec,
+					 velocity);
 	} else if (up(inputKey) && onGround(pos)) {
-		acceleration(directionUp, time_usec, accelerationTimeout_usec, velocity);
+		acceleration(directionUp, time_usec, accelerationTimeout_usec,
+					 velocity);
 	}
 }
 
 bool isMoving(double pos[], double velocity[]) {
-	return velocity[Xcoordinate] != 0 || velocity[Ycoordinate] != 0 || !onGround(pos);
+	return velocity[Xcoordinate] != 0 || velocity[Ycoordinate] != 0 ||
+		   !onGround(pos);
 }
 
 void updateScreen(int oldIntPos[], double pos[]) {
-	if (oldIntPos[Xcoordinate] != intPos(pos[Xcoordinate]) || oldIntPos[Ycoordinate] != intPos(pos[Ycoordinate])) {
+	if (oldIntPos[Xcoordinate] != intPos(pos[Xcoordinate]) ||
+		oldIntPos[Ycoordinate] != intPos(pos[Ycoordinate])) {
 		mvPadaddch(oldIntPos[Ycoordinate], oldIntPos[Xcoordinate], ' ');
 		mvPadaddch(intPos(pos[Ycoordinate]), intPos(pos[Xcoordinate]), 'A');
 		refPad(intPos(pos[Xcoordinate]));
@@ -188,7 +199,8 @@ void initialVelocitySetup(double velocity[]) {
 	velocity[Ycoordinate] = 0;
 }
 
-void initialMovementSetup(long long accelerationTimeout_usec[], double pos[], double velocity[]) {
+void initialMovementSetup(long long accelerationTimeout_usec[], double pos[],
+						  double velocity[]) {
 	initialTimeoutSetup(accelerationTimeout_usec);
 	initialPosSetup(pos);
 	initialVelocitySetup(velocity);
@@ -196,7 +208,8 @@ void initialMovementSetup(long long accelerationTimeout_usec[], double pos[], do
 	refPad(intPos(pos[Xcoordinate]));
 }
 
-long long movement(long long *time_usec, long long accelerationTimeout_usec[], double pos[], double velocity[], int inputKey) {
+long long movement(long long *time_usec, long long accelerationTimeout_usec[],
+				   double pos[], double velocity[], int inputKey) {
 	long long timeDiff_usec = getTimeDiff_usec(time_usec);
 	if (timeDiff_usec > 0 && isMoving(pos, velocity)) {
 		int oldIntPos[2];
@@ -205,6 +218,7 @@ long long movement(long long *time_usec, long long accelerationTimeout_usec[], d
 		setPos(timeDiff_usec, pos, velocity);
 		updateScreen(oldIntPos, pos);
 	}
-	evaluateInput(inputKey, *time_usec, accelerationTimeout_usec, pos, velocity);
+	evaluateInput(inputKey, *time_usec, accelerationTimeout_usec, pos,
+				  velocity);
 	return timeDiff_usec;
 }

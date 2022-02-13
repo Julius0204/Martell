@@ -46,7 +46,8 @@ void mainLoop(long long *fullTimeDiff_usec, long long *counter) {
 	double pos[2], velocity[2];
 	initialMovementSetup(accelerationTimeout_usec, pos, velocity);
 	for (int inputKey = getch(); inputKey != 'q'; inputKey = getch()) {
-		*fullTimeDiff_usec += movement(&time_usec, accelerationTimeout_usec, pos, velocity, inputKey);
+		*fullTimeDiff_usec += movement(&time_usec, accelerationTimeout_usec,
+									   pos, velocity, inputKey);
 		(*counter)++;
 	}
 }
