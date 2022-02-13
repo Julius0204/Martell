@@ -24,29 +24,27 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdbool.h>
 #include <sys/time.h>
 
-long long lastTime_usec = 0;
-long long currentTime_usec = 0;
-double posX = 0, posY = -0.01, velocityX = 0, velocityY = 0;
-long long accelerationTimeout_usec[4];
-const char directionLeft = 0;
-const char directionRight = 1;
-const char directionUp = 2;
-const char directionDown = 3;
+const char Xcoordinate = 0,
+		   Ycoordinate = 1;
+const char directionLeft = 0,
+		   directionRight = 1,
+		   directionUp = 2,
+		   directionDown = 3;
 
 bool collision();
 
-long long getTimeDiff_usec() {
+long long getTimeDiff_usec(long long *lastTime_usec) {
 	struct timeval newTime;
 	gettimeofday(&newTime, 0);
-	currentTime_usec = (long long)newTime.tv_sec * 1000000 + newTime.tv_usec;
-	if (lastTime_usec == 0) {
-		lastTime_usec = currentTime_usec;
+	long long currentTime_usec = (long long)newTime.tv_sec * 1000000 + newTime.tv_usec;
+	if (*lastTime_usec == 0) {
+		*lastTime_usec = currentTime_usec;
 		return 0;
 	}
-	long long timeDiff_usec = currentTime_usec - lastTime_usec;
+	long long timeDiff_usec = currentTime_usec - *lastTime_usec;
 	if (timeDiff_usec == 0)
 		return 0;
-	lastTime_usec = currentTime_usec;
+	*lastTime_usec = currentTime_usec;
 	return timeDiff_usec;
 }
 
@@ -63,9 +61,9 @@ int intPos(double pos) { return posToInt(pos, 0.5); }
 
 int collisionArea(double pos) { return posToInt(pos, 0); }
 
-bool onGround() {
-	if (posY - collisionArea(posY) > 0.9 &&
-		collision(collisionArea(posX), collisionArea(posY) + 1))
+bool onGround(double pos[]) {
+	if (pos[Ycoordinate] - collisionArea(pos[Ycoordinate]) > 0.9 &&
+		collision(collisionArea(pos[Xcoordinate]), collisionArea(pos[Ycoordinate]) + 1))
 		return true;
 	else
 		return false;
@@ -118,74 +116,95 @@ double resolveCollision(double pos, double newPos, double *velocity) {
 	return pos;
 }
 
-void setPos(long long timeDiff_usec) {
-	double newPosX = calcPos(timeDiff_usec, posX, &velocityX, false),
-		   newPosY = calcPos(timeDiff_usec, posY, &velocityY,
-							 !onGround() || velocityY < 0);
-	bool sameCollisionAreaX = collisionArea(newPosX) == collisionArea(posX);
-	bool sameCollisionAreaY = collisionArea(newPosY) == collisionArea(posY);
-	bool sameCollisionArea = sameCollisionAreaX && sameCollisionAreaY;
+void setPos(long long timeDiff_usec, double pos[], double velocity[]) {
+	double newPos[2];
+	newPos[Xcoordinate] = calcPos(timeDiff_usec, pos[Xcoordinate], &velocity[Xcoordinate], false),
+	newPos[Ycoordinate] = calcPos(timeDiff_usec, pos[Ycoordinate], &velocity[Ycoordinate],
+							 !onGround(pos) || velocity[Ycoordinate] < 0);
+	bool sameCollisionAreaFor[2];
+	for (int i = 0; i < 2; i++)
+		sameCollisionAreaFor[i] = collisionArea(newPos[i]) == collisionArea(pos[i]);
+	bool sameCollisionArea = sameCollisionAreaFor[Xcoordinate] && sameCollisionAreaFor[Ycoordinate];
 	if (!sameCollisionArea &&
-		collision(collisionArea(newPosX), collisionArea(newPosY))) {
-		if (!sameCollisionAreaX)
-			newPosX = resolveCollision(posX, newPosX, &velocityX);
-		if (!sameCollisionAreaY)
-			newPosY = resolveCollision(posY, newPosY, &velocityY);
+		collision(collisionArea(newPos[Xcoordinate]), collisionArea(newPos[Ycoordinate]))) {
+		for (int i = 0; i < 2; i++) {
+			if (!sameCollisionAreaFor[i])
+				newPos[i] = resolveCollision(pos[i], newPos[i], &velocity[i]);
+		}
 	}
-	posX = newPosX;
-	posY = newPosY;
+	for (int i = 0; i < 2; i++)
+		pos[i] = newPos[i];
 }
 
-void acceleration(char direction) {
-	if (accelerationTimeout_usec[direction] > currentTime_usec)
+void acceleration(char direction, long long time_usec, long long accelerationTimeout_usec[], double velocity[]) {
+	if (accelerationTimeout_usec[direction] > time_usec)
 		return;
 	long long timeout_usec = 100000;
-	accelerationTimeout_usec[direction] = currentTime_usec + timeout_usec;
+	accelerationTimeout_usec[direction] = time_usec + timeout_usec;
 	double velocityChange = 0.000002;
 	if (direction == directionLeft) {
-		velocityX -= velocityChange;
+		velocity[Xcoordinate] -= velocityChange;
 	} else if (direction == directionRight) {
-		velocityX += velocityChange;
+		velocity[Xcoordinate] += velocityChange;
 	} else if (direction == directionUp) {
-		velocityY = -0.000015;
+		velocity[Ycoordinate] = -0.000015;
 	}
 }
 
-void evaluateInput(int inputKey) {
+void evaluateInput(int inputKey, long long time_usec, long long accelerationTimeout_usec[], double pos[], double velocity[]) {
 	if (left(inputKey)) {
-		acceleration(directionLeft);
+		acceleration(directionLeft, time_usec, accelerationTimeout_usec, velocity);
 	} else if (right(inputKey)) {
-		acceleration(directionRight);
-	} else if (up(inputKey) && onGround()) {
-		acceleration(directionUp);
-	} else if (down(inputKey)) {
-		acceleration(directionDown);
+		acceleration(directionRight, time_usec, accelerationTimeout_usec, velocity);
+	} else if (up(inputKey) && onGround(pos)) {
+		acceleration(directionUp, time_usec, accelerationTimeout_usec, velocity);
 	}
 }
 
-void updateScreen(int oldIntPosX, int oldIntPosY) {
-	if (oldIntPosX != intPos(posX) || oldIntPosY != intPos(posY)) {
-		mvPadaddch(oldIntPosY, oldIntPosX, ' ');
-		mvPadaddch(intPos(posY), intPos(posX), 'A');
-		refPad(intPos(posX));
+bool isMoving(double pos[], double velocity[]) {
+	return velocity[Xcoordinate] != 0 || velocity[Ycoordinate] != 0 || !onGround(pos);
+}
+
+void updateScreen(int oldIntPos[], double pos[]) {
+	if (oldIntPos[Xcoordinate] != intPos(pos[Xcoordinate]) || oldIntPos[Ycoordinate] != intPos(pos[Ycoordinate])) {
+		mvPadaddch(oldIntPos[Ycoordinate], oldIntPos[Xcoordinate], ' ');
+		mvPadaddch(intPos(pos[Ycoordinate]), intPos(pos[Xcoordinate]), 'A');
+		refPad(intPos(pos[Xcoordinate]));
 	}
 }
 
-void initialMovementSetup() {
+void initialTimeoutSetup(long long accelerationTimeout_usec[]) {
 	for (int i = 0; i < 4; i++)
 		accelerationTimeout_usec[i] = 0;
-	mvPadaddch(intPos(posY), intPos(posX), 'A');
-	refPad(intPos(posX));
 }
 
-long long movement(int inputKey) {
-	long long timeDiff_usec = getTimeDiff_usec();
-	if (timeDiff_usec > 0 &&
-		(velocityX != 0 || velocityY != 0 || !onGround())) {
-		int oldIntPosX = intPos(posX), oldIntPosY = intPos(posY);
-		setPos(timeDiff_usec);
-		updateScreen(oldIntPosX, oldIntPosY);
+void initialPosSetup(double pos[]) {
+	pos[Xcoordinate] = 0;
+	pos[Ycoordinate] = -0.01;
+}
+
+void initialVelocitySetup(double velocity[]) {
+	velocity[Xcoordinate] = 0;
+	velocity[Ycoordinate] = 0;
+}
+
+void initialMovementSetup(long long accelerationTimeout_usec[], double pos[], double velocity[]) {
+	initialTimeoutSetup(accelerationTimeout_usec);
+	initialPosSetup(pos);
+	initialVelocitySetup(velocity);
+	mvPadaddch(intPos(pos[Ycoordinate]), intPos(pos[Xcoordinate]), 'A');
+	refPad(intPos(pos[Xcoordinate]));
+}
+
+long long movement(long long *time_usec, long long accelerationTimeout_usec[], double pos[], double velocity[], int inputKey) {
+	long long timeDiff_usec = getTimeDiff_usec(time_usec);
+	if (timeDiff_usec > 0 && isMoving(pos, velocity)) {
+		int oldIntPos[2];
+		for (int i = 0; i < 2; i++)
+			oldIntPos[i] = intPos(pos[i]);
+		setPos(timeDiff_usec, pos, velocity);
+		updateScreen(oldIntPos, pos);
 	}
-	evaluateInput(inputKey);
+	evaluateInput(inputKey, *time_usec, accelerationTimeout_usec, pos, velocity);
 	return timeDiff_usec;
 }
